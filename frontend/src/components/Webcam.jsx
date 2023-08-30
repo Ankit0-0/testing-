@@ -13,32 +13,25 @@ const Webcam = () => {
     return new File([u8arr], filename, { type: mime });
   }
 
-  const [file, setFile] = useState("");
+  const apicall = async () => {
+    let photo = photoRef.current;
+    console.log("photo: " + photo.toDataURL());
 
-  const apicall = async (file) => {
-    console.log(file);
-    if (file) {
-      try {
-        const dataForm = new FormData();
-        dataForm.append("image", file);
+    let encodedPhoto = dataURLToFile(photo.toDataURL(), "file.png");
 
-        const response = await fetch("http://127.0.0.1:5999/api/imageroute", {
-          method: "POST",
-          // mode: "no-cors",
-          // headers: {
-          //   "Content-type": "multipart/form-data",
-          // },
-          body: dataForm,
-        });
-        // const data = await response.json();
-        // console.log(response);
-        const responseData = await response.json();
-        console.log("API response:", responseData)
-        // return data;
-      } catch (error) {
-        console.error("API call error:", error);
-        // return null;
-      }
+
+    try {
+      const dataForm = new FormData();
+      dataForm.append("image", encodedPhoto);
+
+      const response = await fetch("http://127.0.0.1:5999/api/imageroute", {
+        method: "POST",
+        body: dataForm,
+      });
+      const responseData = await response.json();
+      console.log("API response:", responseData);
+    } catch (error) {
+      console.error("API call error:", error);
     }
   };
 
@@ -67,10 +60,6 @@ const Webcam = () => {
     let height = 280;
 
     let photo = photoRef.current;
-    console.log("photo: " + photo.toDataURL());
-    let encodedPhoto = dataURLToFile(photo.toDataURL(), "file.png");
-    console.log("encodedPhoto: " + encodedPhoto);
-    setFile(encodedPhoto);
     let video = videoRef.current;
 
     photo.width = width;
@@ -84,10 +73,8 @@ const Webcam = () => {
   useEffect(() => {
     getUserCamera();
   }, []);
-  
-  useEffect(() => {
-    console.log("Photo loaded successfully ", file);
-  }, [photoRef,file]);
+
+
 
   return (
     <div>
@@ -96,7 +83,7 @@ const Webcam = () => {
       <canvas ref={photoRef}></canvas>
       <button
         onClick={() => {
-          apicall(file);
+          apicall();
         }}
       >
         Call API
