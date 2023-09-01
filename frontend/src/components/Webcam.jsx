@@ -15,14 +15,17 @@ const Webcam = () => {
 
   const apicall = async () => {
     let photo = photoRef.current;
-    console.log("photo: " + photo.toDataURL());
+    console.log('callig');
+    // console.log("photo: " + photo.toDataURL());
 
     let encodedPhoto = dataURLToFile(photo.toDataURL(), "file.png");
-
 
     try {
       const dataForm = new FormData();
       dataForm.append("image", encodedPhoto);
+
+
+      
 
       const response = await fetch("http://127.0.0.1:5999/api/imageroute", {
         method: "POST",
@@ -73,8 +76,6 @@ const Webcam = () => {
   useEffect(() => {
     getUserCamera();
   }, []);
-
-
 
   return (
     <div>

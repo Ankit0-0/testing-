@@ -1,7 +1,7 @@
 import  express  from "express";
 import router from "./router/imageRoute.js"
 import cors from 'cors'
-// import fileupload from 'express-fileupload'
+// import fileUpload from "express-fileupload";
 const app = express();
 
 const port = 5999
@@ -13,8 +13,8 @@ app.use(cors({
     credentials: true,
 }))
 
-// app.use(fileupload({
-//     // useTempFiles: true
+// app.use(fileUpload({
+//     useTempFiles: true
 // }))
 
 app.get('/', (req, res) => {
